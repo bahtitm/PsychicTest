@@ -10,29 +10,36 @@
 </head>
 <body>
 
-    <h3>Session Page</h3>
-    Age: @Context.Session.GetInt32("age")
+    <h3>Список Экстрасенсов</h3>
+    <div>
+        @{
+            var psychics = SessionHelper.GetObjectFromJson<List<Psychic>>(Context.Session, "psychics");
+        }
+        @foreach (var p in psychics)
+        {
+            <div>
+
+                Имя экстрасенса: @p.Name
+                <br />
+                Догадка экстрасенса: @p.GuessedWork
+                <br />
+                Уровень достоверности: @p.ConfidenceLevel
+                ==================
+                <br />
+            </div>
+        }
+    </div>
+    
     <br />
-    Username: @Context.Session.GetString("username")
-
-
-
-    <h3>Product List</h3>
-    @{
-        var psychic = SessionHelper.GetObjectFromJson<List<Psychic>>(Context.Session, "products");
-    }
-    @foreach (var p in psychic)
-    {
-        <div>
-
-            Name: @p.Name
+    <div class="block1">
+        <form id="form1" method="post" action=CountConfidenceLevel>
+            <label>Напишите ваше Загадонное число</label> <br />
+            <input type="number" name="GuessedNumber" value="" />
             <br />
-            GuessedNumber: @p.GuessedNumber
-            <br />
-            ==================
-            <br />
-        </div>
-    }
+            <input type="submit" name="GuessedNumber" value="Загадонное число" />
+
+        </form>
+    </div>
 
 </body>
 </html>

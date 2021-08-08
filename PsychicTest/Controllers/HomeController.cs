@@ -30,36 +30,57 @@ namespace PsychicTest.Controllers
 
         private void CreatePsychic()
         {
-            //HttpContext.Session.SetInt32("age", 20);
 
-            //HttpContext.Session.SetString("username", "abc");
 
-            
-            
-
-            List<Psychic> products = new List<Psychic>() {
+            List<Psychic> psychics = new List<Psychic>() {
                 new Psychic {
-                    
-                    Name = "Name 1",
-                    GuessedNumber=0
+
+                    Name = "Черный маг",
+                    GuessedWork=0
                 },
                 new Psychic {
-                    
-                    Name = "Name 2",
-                    GuessedNumber=0
+
+                    Name = "Белый Маг",
+                    GuessedWork=0
                 },
-                
+
             };
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "products", products);
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "psychics", psychics);
         }
 
         public IActionResult Privacy()
         {
+
             return View();
         }
         public IActionResult Guesswork()
         {
+
+            var psychics = SessionHelper.GetObjectFromJson<List<Psychic>>(HttpContext.Session, "psychics");
+            foreach (var item in psychics)
+            {
+                var psychicHelper = new PsychicHelper(item);
+                psychicHelper.SetGuesswork();
+
+            }
+            HttpContext.Session.Clear();
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "psychics", psychics);
             return View();
+        }
+        [HttpPost]
+        public IActionResult CountConfidenceLevel(int guessedNumber)
+        {
+
+            var psychics = SessionHelper.GetObjectFromJson<List<Psychic>>(HttpContext.Session, "psychics");
+            foreach (var item in psychics)
+            {
+                var psychicHelper = new PsychicHelper(item);
+                psychicHelper.CountConfidenceLevel(guessedNumber);
+
+            }
+            HttpContext.Session.Clear();
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "psychics", psychics);
+            return RedirectToAction("Index");
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

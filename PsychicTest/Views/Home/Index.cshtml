@@ -3,14 +3,33 @@
 }
 
 @*<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>*@
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>*@
 <div class="block1">
     <form id="form1" method="post" action="Home/Guesswork">
-        <label>Загадайте число</label> <br />
-         <br />
-        <input type="submit" name="Donate" value="Да загодал" />
+        <label>Загадайте любое число</label> <br />
+        <br />
+        <input type="submit" name="Donate" value="Да загадал" />
 
     </form>
+</div>
+<h3>Psychics List</h3>
+<div>
+    @{
+        var psychics = SessionHelper.GetObjectFromJson<List<Psychic>>(Context.Session, "psychics");
+    }
+    @foreach (var p in psychics)
+    {
+        <div>
+
+            Имя экстрасенса: @p.Name
+            <br />
+            Догадка экстрасенса: @p.GuessedWork
+            <br />
+            Уровень достоверности: @p.ConfidenceLevel
+            ==================
+            <br />
+        </div>
+    }
 </div>

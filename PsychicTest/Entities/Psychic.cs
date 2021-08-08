@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 
 namespace PsychicTest.Entities
 {
+    /// <summary>
+    /// Экстрасенс
+    /// </summary>
     public class Psychic
     {
         public string Name { get; set; }
-
-        public int GuessedNumber { get; set; }
+        /// <summary>
+        /// Догадка его
+        /// </summary>
+        public int GuessedWork { get; set; } = 0;
+        /// <summary>
+        /// уровень достоверности
+        /// </summary>
+        public int ConfidenceLevel { get; set; } = 0;
 
     }
 }
