@@ -23,7 +23,11 @@ namespace PsychicTest.Controllers
 
         public IActionResult Index()
         {
+            var psychics = SessionHelper.GetObjectFromJson<List<Psychic>>(HttpContext.Session, "psychics");
+            if (psychics == null)
+            { 
             CreatePsychic();
+            }
             return View();
             // RedirectToAction("Guesswork") ;
         }
