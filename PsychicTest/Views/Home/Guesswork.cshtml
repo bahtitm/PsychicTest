@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using PsychicTest.Helpers;
+@using PsychicTest.Models;
+@using PsychicTest.Entities
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+    <h3>Session Page</h3>
+    Age: @Context.Session.GetInt32("age")
+    <br />
+    Username: @Context.Session.GetString("username")
+
+
+
+    <h3>Product List</h3>
+    @{
+        var psychic = SessionHelper.GetObjectFromJson<List<Psychic>>(Context.Session, "products");
+    }
+    @foreach (var p in psychic)
+    {
+        <div>
+
+            Name: @p.Name
+            <br />
+            GuessedNumber: @p.GuessedNumber
+            <br />
+            ==================
+            <br />
+        </div>
+    }
+
+</body>
+</html>
