@@ -1,41 +1,25 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using PsychicTest.Entities;
 using PsychicTest.Helpers;
 using PsychicTest.Models;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PsychicTest.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
 
         public IActionResult Index()
         {
-            var psychics = SessionHelper.GetObjectFromJson<List<Psychic>>(HttpContext.Session, "psychics");
-            if (psychics == null)
-            { 
-            CreatePsychic();
-            }
-            return View();
-            // RedirectToAction("Guesswork") ;
+            var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
+            return psychics != null ? View(psychics) : View(CreatePsychics());
+           
         }
 
-        private void CreatePsychic()
+        private List<Psychic> CreatePsychics()
         {
-
-
             List<Psychic> psychics = new List<Psychic>() {
                 new Psychic {
 
@@ -49,33 +33,29 @@ namespace PsychicTest.Controllers
                 },
 
             };
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "psychics", psychics);
+            HttpContext.Session.SetObjectAsJson("psychics", psychics);
+            return psychics;
         }
-
-        public IActionResult Privacy()
-        {
-
-            return View();
-        }
+        [HttpPost]
         public IActionResult Guesswork()
         {
 
-            var psychics = SessionHelper.GetObjectFromJson<List<Psychic>>(HttpContext.Session, "psychics");
+            var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
+            HttpContext.Session.Clear();
             foreach (var item in psychics)
             {
                 var psychicHelper = new PsychicHelper(item);
                 psychicHelper.SetGuesswork();
 
             }
-            HttpContext.Session.Clear();
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "psychics", psychics);
-            return View();
+            HttpContext.Session.SetObjectAsJson("psychics", psychics);
+            return View(psychics);
         }
         [HttpPost]
         public IActionResult CountConfidenceLevel(int guessedNumber)
         {
 
-            var psychics = SessionHelper.GetObjectFromJson<List<Psychic>>(HttpContext.Session, "psychics");
+            var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
             foreach (var item in psychics)
             {
                 var psychicHelper = new PsychicHelper(item);
@@ -83,7 +63,7 @@ namespace PsychicTest.Controllers
 
             }
             HttpContext.Session.Clear();
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "psychics", psychics);
+            HttpContext.Session.SetObjectAsJson("psychics", psychics);
             return RedirectToAction("Index");
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

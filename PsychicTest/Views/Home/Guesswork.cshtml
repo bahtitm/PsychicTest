@@ -1,8 +1,6 @@
-﻿@using Microsoft.AspNetCore.Http;
-@using PsychicTest.Helpers;
-@using PsychicTest.Models;
-@using PsychicTest.Entities
-
+﻿@using PsychicTest.Helpers;
+@using PsychicTest.Entities;
+@model List<Psychic>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -12,25 +10,23 @@
 
     <h3>Список Экстрасенсов</h3>
     <div>
-        @{
-            var psychics = SessionHelper.GetObjectFromJson<List<Psychic>>(Context.Session, "psychics");
-        }
-        @foreach (var p in psychics)
+                 
+        @foreach (var p in Model)
         {
-        <div>
+            <div>
 
-            Имя экстрасенса: @p.Name
-            <br />
-            Догадка экстрасенса: @p.GuessedWork
-            <br />
-            Уровень достоверности: @p.ConfidenceLevel
-            <br />
-            ==================
-            <br />
-        </div>
+                Имя экстрасенса: @p.Name
+                <br />
+                Догадка экстрасенса: @p.GuessedWork
+                <br />
+                Уровень достоверности: @p.ConfidenceLevel
+                <br />
+                ==================
+                <br />
+            </div>
         }
     </div>
-    
+
     <br />
     <div class="block1">
         <form id="form1" method="post" action=CountConfidenceLevel>

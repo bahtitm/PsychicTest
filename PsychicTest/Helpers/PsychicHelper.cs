@@ -1,9 +1,5 @@
 ﻿using PsychicTest.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PsychicTest.Helpers
 {
@@ -15,29 +11,29 @@ namespace PsychicTest.Helpers
         {
             this.psyshic = psyshic;
         }
-        
+
         /// <summary>
         /// получить догатку
         /// </summary>
         /// <returns></returns>
         public int GetGuesswork()
         {
-            var random= new Random();
+            var random = new Random();
             random.Next();
             return random.Next();
         }
         public void SetGuesswork()
         {
             var random = new Random();
-            psyshic.GuessedWork= random.Next(0,10);
+            psyshic.GuessedWork = random.Next(0, 10);
         }
-        public void CountConfidenceLevel(int guessedNumber )
+        public void CountConfidenceLevel(int guessedNumber)
         {
             if (psyshic.GuessedWork != guessedNumber)
             {
                 return;
             }
-            else 
+            else
             {
                 psyshic.ConfidenceLevel++;
 
