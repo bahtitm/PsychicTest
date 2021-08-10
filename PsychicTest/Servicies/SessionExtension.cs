@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Text;
-using System.Text.Json;
 
-namespace PsychicTest.Helpers
+namespace PsychicTest.Servicies
 {
     public static class SessionExtension
     {
@@ -16,11 +15,8 @@ namespace PsychicTest.Helpers
         public static T GetObjectFromJson<T>(this ISession session, string key)
         {
             var value = session.GetString(key);
-                
 
-            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
+            return value == null ? default : JsonConvert.DeserializeObject<T>(value);
         }
-
-
     }
 }

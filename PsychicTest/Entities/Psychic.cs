@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace PsychicTest.Entities
@@ -7,7 +6,7 @@ namespace PsychicTest.Entities
     /// <summary>
     /// Экстрасенс
     /// </summary>
-    public class Psychic 
+    public class Psychic
     {
         public string Name { get; set; } = string.Empty;
         /// <summary>
@@ -27,7 +26,7 @@ namespace PsychicTest.Entities
             random.Next();
             return random.Next();
         }
-        public void SetGuesswork()
+        public void SetGuessworkAndWriteIntoHistory()
         {
             var random = new Random();
             GuessedWork = random.Next(0, 99);
