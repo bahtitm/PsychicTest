@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var guessedNumbers = (List<int>)ViewData["GuessedNumbers"];
 }
 @model List<Psychic>
 <div class="block1">
@@ -12,19 +13,71 @@
 </div>
 <h3>Список Экстрасенсов</h3>
 <div>
-  
+
     @foreach (var p in Model)
     {
-    <div>
+        <div>
 
-        Имя экстрасенса: @p.Name
-        <br />
-        Догадка экстрасенса: @p.GuessedWork
-        <br />
-        Уровень достоверности: @p.ConfidenceLevel
-        <br />
-        ==================
-        <br />
-    </div>
+            Имя экстрасенса: @p.Name
+            <br />
+            Догадка экстрасенса: @p.GuessedWork
+            <br />
+            Уровень достоверности: @p.ConfidenceLevel
+            <br />
+            <div>
+                <table border="1" bordercolor="green" bgcolor="yellow">
+                    <thead>
+                        <tr>
+                            <td colspan="4">История Дагадок</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Значения</th>
+                    </tr>
+
+                    @foreach (var item in p.GuessedWorkHistory.Select((value, i) => (value, i)))
+                    {
+                        <tr>
+                            <td>@{var i = item.i;i++;}@i </td>
+                            <td>@item.value.ToString()</td>
+                        </tr>                   
+
+                    }
+
+                </table>
+            </div>
+
+            ==================
+            <br />
+        </div>
     }
+</div>
+<h3>Загаданные числа</h3>
+<div>
+    <div>
+        <table border="1" bordercolor="green" bgcolor="yellow">
+            <thead>
+                <tr>
+                    <td colspan="4">Загаданные числа</td>
+                </tr>
+            </thead>
+            <tr>
+                <th>№</th>
+                <th>Значения</th>
+            </tr>
+
+            @foreach (var item in guessedNumbers.Select((value, i) => (value, i)))
+            {
+                <tr>
+                    <td>@{var i = item.i; i++;}@i </td>
+                    <td>@item.value.ToString()</td>
+                </tr>
+
+
+
+            }
+
+        </table>
+    </div>
 </div>

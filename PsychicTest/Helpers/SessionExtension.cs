@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace PsychicTest.Helpers
 {
-    public static class SessionHelper
+    public static class SessionExtension
     {
 
         public static void SetObjectAsJson(this ISession session, string key, object value)
@@ -16,16 +16,9 @@ namespace PsychicTest.Helpers
         public static T GetObjectFromJson<T>(this ISession session, string key)
         {
             var value = session.GetString(key);
-            var SerializerSettings = new JsonSerializerSettings()
-            {
-
-                NullValueHandling = NullValueHandling.Ignore,
-               
                 
 
-            };          
-
-            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value,SerializerSettings);
+            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
         }
 
 

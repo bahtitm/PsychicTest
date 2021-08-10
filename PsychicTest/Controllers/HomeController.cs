@@ -13,11 +13,76 @@ namespace PsychicTest.Controllers
 
         public IActionResult Index()
         {
+            var guessedNumnbers = HttpContext.Session.GetObjectFromJson<List<int>>("GuessedNumbers");
+            if (guessedNumnbers != null)
+            {
+
+                ViewData["GuessedNumbers"] = guessedNumnbers;
+            }
+            else
+            {
+                var zeroValuies = new List<int>();
+                zeroValuies.Add(0);
+                ViewData["GuessedNumbers"] = zeroValuies;
+            }
             var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
             return psychics != null ? View(psychics) : View(CreatePsychics());
            
         }
 
+        
+        [HttpPost]
+        public IActionResult Guesswork()
+        {
+
+            var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
+            
+            foreach (var item in psychics)
+            {
+               item.SetGuesswork();
+
+            }
+            HttpContext.Session.SetObjectAsJson("psychics", psychics);
+            return View(psychics);
+        }
+        [HttpPost]
+        public IActionResult CountConfidenceLevel(int guessedNumber)
+        {
+            
+            AddInHistoryUserGuessedNumber(guessedNumber);
+            var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
+            foreach (var item in psychics)
+            {
+                
+                item.CountConfidenceLevel(guessedNumber);
+
+            }
+           
+            HttpContext.Session.SetObjectAsJson("psychics", psychics);
+            return RedirectToAction("Index");
+        }
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        private void AddInHistoryUserGuessedNumber(int guessedNumber)
+        {
+            var guessedNumbers = HttpContext.Session.GetObjectFromJson<List<int>>("GuessedNumbers");
+            if (guessedNumbers != null)
+            {
+                guessedNumbers.Add(guessedNumber);
+            }
+            else
+            {
+                guessedNumbers = new List<int>();
+                guessedNumbers.Add(guessedNumber);
+
+
+            }
+            HttpContext.Session.Remove("GuessedNumbers");
+            HttpContext.Session.SetObjectAsJson("GuessedNumbers", guessedNumbers);
+        }
         private List<Psychic> CreatePsychics()
         {
             List<Psychic> psychics = new List<Psychic>() {
@@ -35,41 +100,6 @@ namespace PsychicTest.Controllers
             };
             HttpContext.Session.SetObjectAsJson("psychics", psychics);
             return psychics;
-        }
-        [HttpPost]
-        public IActionResult Guesswork()
-        {
-
-            var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
-            HttpContext.Session.Clear();
-            foreach (var item in psychics)
-            {
-                var psychicHelper = new PsychicHelper(item);
-                psychicHelper.SetGuesswork();
-
-            }
-            HttpContext.Session.SetObjectAsJson("psychics", psychics);
-            return View(psychics);
-        }
-        [HttpPost]
-        public IActionResult CountConfidenceLevel(int guessedNumber)
-        {
-
-            var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
-            foreach (var item in psychics)
-            {
-                var psychicHelper = new PsychicHelper(item);
-                psychicHelper.CountConfidenceLevel(guessedNumber);
-
-            }
-            HttpContext.Session.Clear();
-            HttpContext.Session.SetObjectAsJson("psychics", psychics);
-            return RedirectToAction("Index");
-        }
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
