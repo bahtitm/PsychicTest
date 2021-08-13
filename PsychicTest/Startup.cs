@@ -9,7 +9,7 @@ namespace PsychicTest
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly string AllowOrigins = "AllowOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -22,10 +22,10 @@ namespace PsychicTest
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(MyAllowSpecificOrigins,
+                options.AddPolicy(AllowOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins()
+                                      builder.AllowAnyOrigin()
                                                           .AllowAnyHeader()
                                                           .AllowAnyMethod();
                                   });
@@ -48,7 +48,7 @@ namespace PsychicTest
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            app.UseCors();
+            app.UseCors(AllowOrigins);
             app.UseSession();
 
             app.UseHttpsRedirection();
