@@ -1,8 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    var guessedNumbers = (List<int>)ViewData["GuessedNumbers"];
+    
 }
-@model List<Psychic>
+@model StatisticsModel
 <div class="block1">
     <form id="form1" method="post" action="Home/Guesswork">
         <label>Загадайте двух значное число</label> <br />
@@ -14,7 +14,7 @@
 <h3>Список Экстрасенсов</h3>
 <div>
 
-    @foreach (var p in Model)
+    @foreach (var p in Model.Psychics)
     {
         <div>
 
@@ -67,7 +67,7 @@
                 <th>Значения</th>
             </tr>
 
-            @foreach (var item in guessedNumbers.Select((value, i) => (value, i)))
+            @foreach (var item in Model.GuessedNumbers.Select((value, i) => (value, i)))
             {
                 <tr>
                     <td>@{var i = item.i; i++;}@i </td>

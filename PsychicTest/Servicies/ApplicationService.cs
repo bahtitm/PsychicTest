@@ -7,8 +7,8 @@ namespace PsychicTest.Servicies
     public class ApplicationService : IApplicationService
     {
         private readonly ISession session;
-        private readonly IHttpContextAccessor httpContextAccessor;
-
+       
+        const int PsychicCount = 2;
         public ApplicationService(ISession session)
         {
 
@@ -33,20 +33,22 @@ namespace PsychicTest.Servicies
         }
         public List<Psychic> CreatePsychics()
         {
+
             List<Psychic> psychics = new List<Psychic>() {
-                new Psychic {
-
-                    Name = "Черный маг",
-                    GuessedWork=0
-                },
-                new Psychic {
-
-                    Name = "Белый Маг",
-                    GuessedWork=0
-                },
-
-            };
-            session.SetObjectAsJson("psychics", psychics);
+                new Psychic("Черный маг"),
+                new Psychic("Белый Маг"),
+                new Psychic("Midel mag")};
+            if (PsychicCount >= 0 && PsychicCount <= 3)
+            {
+                var reversePsychicCount = 3 - PsychicCount;
+                psychics.RemoveRange(0, reversePsychicCount);
+                session.SetObjectAsJson("psychics", psychics);
+            }
+            else
+            {
+                
+                session.SetObjectAsJson("psychics", psychics);
+            }
             return psychics;
         }
 

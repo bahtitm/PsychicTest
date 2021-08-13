@@ -22,30 +22,44 @@ namespace PsychicTest.Controllers
 
 
         public IActionResult Index()
-        {           
+        {
+            var statisticsModel = new StatisticsModel();
             var guessedNumnbers = HttpContext.Session.GetObjectFromJson<List<int>>("GuessedNumbers");
             if (guessedNumnbers != null)
             {
 
-                ViewData["GuessedNumbers"] = guessedNumnbers;
+                statisticsModel.GuessedNumbers = guessedNumnbers;
             }
             else
             {
                 var zeroValuies = new List<int>();
                 zeroValuies.Add(0);
-                ViewData["GuessedNumbers"] = zeroValuies;
+                statisticsModel.GuessedNumbers = zeroValuies;
             }
+            
             var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
-            return psychics != null ? View(psychics) : View(applicationService.CreatePsychics());
+            if (psychics != null)
+            {
+                
+                statisticsModel.Psychics = psychics;
+                
+            }
+            else
+            {
+                statisticsModel.Psychics = applicationService.CreatePsychics();
+               
+                
+            }
+            
+            return View(statisticsModel);
 
         }
-
-
         [HttpPost]
         public IActionResult Guesswork()
         {
-            var psychics= applicationService.Guesswork();           
-            return View(psychics);
+            var guessworModel = new GuessworkModel();
+            guessworModel.Psychics= applicationService.Guesswork();
+            return View(guessworModel);
         }
         [HttpPost]
         public IActionResult CountConfidenceLevel(int guessedNumber)

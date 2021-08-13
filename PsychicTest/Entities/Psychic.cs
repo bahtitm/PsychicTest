@@ -8,7 +8,7 @@ namespace PsychicTest.Entities
     /// </summary>
     public class Psychic
     {
-        public string Name { get; set; } = string.Empty;
+       public string Name { get; set; } = string.Empty;
         /// <summary>
         /// Догадка екстрасенса
         /// </summary>
@@ -18,6 +18,11 @@ namespace PsychicTest.Entities
         /// </summary>
         public int ConfidenceLevel { get; set; } = 0;
         public List<int> GuessedWorkHistory { get; set; } = new List<int>();
+
+        public Psychic(string name)
+        {
+            Name = name;
+        }
 
 
         public int GetGuesswork()
@@ -34,7 +39,13 @@ namespace PsychicTest.Entities
         }
         public void CountConfidenceLevel(int guessedNumber)
         {
-            var result = GuessedWork == guessedNumber ? ConfidenceLevel++ : ConfidenceLevel--;
+            if (GuessedWork == guessedNumber)
+            {
+                ConfidenceLevel++;
+            } else
+            { 
+             ConfidenceLevel--;
+            }
 
         }
 

@@ -1,6 +1,6 @@
 ﻿@using PsychicTest.Servicies;
 @using PsychicTest.Entities;
-@model List<Psychic>
+@model GuessworkModel
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -11,7 +11,7 @@
     <h3>Список Экстрасенсов</h3>
     <div>
                  
-        @foreach (var p in Model)
+        @foreach (var p in Model.Psychics)
         {
             <div>
 
@@ -31,7 +31,7 @@
     <div class="block1">
         <form id="form1" method="post" action=CountConfidenceLevel>
             <label>Напишите ваше Загадонное число</label> <br />
-            <input type="number" max="99", min="0" name="GuessedNumber" value="" />
+            <input type="number" max="99", min="10" name="GuessedNumber" value="" />
             <br />
             <input type="submit" name="GuessedNumber" value="Загадонное число" />
 
