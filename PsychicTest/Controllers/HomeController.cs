@@ -12,11 +12,13 @@ namespace PsychicTest.Controllers
     {
         
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IStorageServise storageServise;
         private readonly IApplicationService applicationService;
 
         public HomeController(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
+            this.storageServise = new StorageService(_httpContextAccessor.HttpContext.Session) ;
             this.applicationService = new ApplicationService(_httpContextAccessor.HttpContext.Session);
         }
 
@@ -24,7 +26,8 @@ namespace PsychicTest.Controllers
         public IActionResult Index()
         {
             var statisticsModel = new StatisticsModel();
-            var guessedNumnbers = HttpContext.Session.GetObjectFromJson<List<int>>("GuessedNumbers");
+           
+            var guessedNumnbers = storageServise.GetFromStorge<List<int>>("GuessedNumbers");
             if (guessedNumnbers != null)
             {
 
@@ -35,9 +38,9 @@ namespace PsychicTest.Controllers
                 var zeroValuies = new List<int>();
                 zeroValuies.Add(0);
                 statisticsModel.GuessedNumbers = zeroValuies;
-            }
-            
-            var psychics = HttpContext.Session.GetObjectFromJson<List<Psychic>>("psychics");
+            }          
+           
+            var psychics = storageServise.GetFromStorge<List<Psychic>>("psychics");
             if (psychics != null)
             {
                 
