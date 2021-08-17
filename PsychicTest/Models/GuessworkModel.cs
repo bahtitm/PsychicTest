@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace PsychicTest.Models
 {
-    public class GuessworkModel
+    public  class GuessworkModel
     {
-        public List<Psychic> Psychics { get; set; }
+        public List<Psychic> Psychics { get; set; } = new List<Psychic>();
     }
 }

@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PsychicTest.Servicies;
 
 namespace PsychicTest
 {
     public class Startup
     {
-        readonly string AllowOrigins = "AllowOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -20,19 +18,10 @@ namespace PsychicTest
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy(AllowOrigins,
-                                  builder =>
-                                  {
-                                      builder.AllowAnyOrigin()
-                                                          .AllowAnyHeader()
-                                                          .AllowAnyMethod();
-                                  });
-            });
+
             services.AddControllersWithViews();
             services.AddSession();
-            services.AddHttpContextAccessor();     
+            services.AddHttpContextAccessor();
 
         }
 
@@ -48,7 +37,7 @@ namespace PsychicTest
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            app.UseCors(AllowOrigins);
+
             app.UseSession();
 
             app.UseHttpsRedirection();

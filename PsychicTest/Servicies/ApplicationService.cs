@@ -38,6 +38,8 @@ namespace PsychicTest.Servicies
                 new Psychic("Черный маг"),
                 new Psychic("Белый Маг"),
                 new Psychic("Midel mag")};
+           
+            
             if (PsychicCount >= 0 && PsychicCount <= 3)
             {
                 var reversePsychicCount = 3 - PsychicCount;
@@ -80,8 +82,6 @@ namespace PsychicTest.Servicies
             }
             session.SetObjectAsJson("psychics", psychics);
             return psychics;
-
-
         }
 
     }

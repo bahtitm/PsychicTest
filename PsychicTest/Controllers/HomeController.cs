@@ -33,13 +33,7 @@ namespace PsychicTest.Controllers
 
                 statisticsModel.GuessedNumbers = guessedNumnbers;
             }
-            else
-            {
-                var zeroValuies = new List<int>();
-                zeroValuies.Add(0);
-                statisticsModel.GuessedNumbers = zeroValuies;
-            }          
-           
+
             var psychics = storageServise.GetFromStorge<List<Psychic>>("psychics");
             if (psychics != null)
             {
@@ -58,11 +52,19 @@ namespace PsychicTest.Controllers
 
         }
         [HttpPost]
-        public IActionResult Guesswork()
+        public IActionResult GenerateGuesswork()
         {
             var guessworModel = new GuessworkModel();
-            guessworModel.Psychics= applicationService.Guesswork();
-            return View(guessworModel);
+            guessworModel.Psychics = applicationService.Guesswork();
+            storageServise.SetIntoStorge("GuessworkModel",guessworModel);
+            return Redirect("Guesswork");
+        }
+
+      
+        public IActionResult Guesswork()
+        {
+            var guessworkModel = storageServise.GetFromStorge<GuessworkModel>("GuessworkModel");
+            return View(guessworkModel);
         }
         [HttpPost]
         public IActionResult CountConfidenceLevel(int guessedNumber)

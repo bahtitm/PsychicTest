@@ -10,6 +10,6 @@ namespace PsychicTest.Models
     public class StatisticsModel
     {
         public List<Psychic> Psychics { get; set; }
-        public List<int> GuessedNumbers { get; set; }
+        public List<int> GuessedNumbers { get; set; } = new List<int>();
     }
 }

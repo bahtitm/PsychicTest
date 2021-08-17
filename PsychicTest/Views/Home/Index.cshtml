@@ -4,7 +4,7 @@
 }
 @model StatisticsModel
 <div class="block1">
-    <form id="form1" method="post" action="Home/Guesswork">
+    <form id="form1" method="post" action="Home/GenerateGuesswork">
         <label>Загадайте двух значное число</label> <br />
         <br />
         <input type="submit" name="Donate" value="Да загадал" />
@@ -35,16 +35,23 @@
                         <th>№</th>
                         <th>Значения</th>
                     </tr>
+                    @{
 
-                    @foreach (var item in p.GuessedWorkHistory.Select((value, i) => (value, i)))
-                    {
-                        <tr>
-                            <td>@{var i = item.i;i++;}@i </td>
-                            <td>@item.value.ToString()</td>
-                        </tr>                   
+                        for (int i = 0; i < p.GuessedWorkHistory.Count; i++)
+                        {
+                         
+                            <tr>
+                                <td>@{
+                                        var item = i;
+                                        item++;
+                                    }@item </td>
+                                <td>@p.GuessedWorkHistory[i]</td>
+                            </tr> 
+                        }
 
                     }
-
+                    
+                    
                 </table>
             </div>
 
@@ -66,18 +73,19 @@
                 <th>№</th>
                 <th>Значения</th>
             </tr>
-
-            @foreach (var item in Model.GuessedNumbers.Select((value, i) => (value, i)))
-            {
-                <tr>
-                    <td>@{var i = item.i; i++;}@i </td>
-                    <td>@item.value.ToString()</td>
-                </tr>
-
-
-
+            
+            @{
+                for (int i = 0; i < Model.GuessedNumbers.Count; i++)
+                {
+                    <tr>
+                        <td>@{
+                                var item = i;
+                                item++;
+                            }@item </td>
+                        <td>@Model.GuessedNumbers[i]</td>
+                    </tr> 
+                }
             }
-
         </table>
     </div>
 </div>
