@@ -25,8 +25,11 @@ namespace PsychicTest.Controllers
 
         public IActionResult Index()
         {
+            var gamesessionModel = new GameSessionModel();
             var statisticsModel = new StatisticsModel();
            
+          
+            
             var guessedNumnbers = storageServise.GetFromStorge<List<int>>("GuessedNumbers");
             if (guessedNumnbers != null)
             {

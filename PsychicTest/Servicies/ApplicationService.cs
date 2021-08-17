@@ -34,23 +34,13 @@ namespace PsychicTest.Servicies
         public List<Psychic> CreatePsychics()
         {
 
-            List<Psychic> psychics = new List<Psychic>() {
-                new Psychic("Черный маг"),
-                new Psychic("Белый Маг"),
-                new Psychic("Midel mag")};
-           
-            
-            if (PsychicCount >= 0 && PsychicCount <= 3)
+            List<Psychic> psychics = new List<Psychic>();
+            for (int i = 0; i < PsychicCount; i++)
             {
-                var reversePsychicCount = 3 - PsychicCount;
-                psychics.RemoveRange(0, reversePsychicCount);
-                session.SetObjectAsJson("psychics", psychics);
+                psychics.Add(PsyhicGenerator.GeneratePsychic());
             }
-            else
-            {
-                
-                session.SetObjectAsJson("psychics", psychics);
-            }
+            session.SetObjectAsJson("psychics", psychics);
+          
             return psychics;
         }
 
