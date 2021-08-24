@@ -12,11 +12,11 @@ namespace PsychicTest.Entities
         /// <summary>
         /// Догадка екстрасенса
         /// </summary>
-        public int GuessedWork { get; set; } = 0;
+        public int GuessedWork { get;  set; }
         /// <summary>
         /// уровень достоверности
         /// </summary>
-        public int ConfidenceLevel { get; set; } = 0;
+        public int ConfidenceLevel { get;  set; }
         public List<int> GuessedWorkHistory { get; set; } = new List<int>();
 
         public Psychic(string name)
