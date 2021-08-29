@@ -15,27 +15,28 @@ namespace PsychicTest.Controllers
         private readonly IStorageServise storageServise;
         private readonly IApplicationService applicationService;
 
-        public HomeController(IHttpContextAccessor httpContextAccessor)
+        public HomeController(IHttpContextAccessor httpContextAccessor, IApplicationService applicationService)
         {
             _httpContextAccessor = httpContextAccessor;
             this.storageServise = new StorageService(_httpContextAccessor.HttpContext.Session) ;
-            this.applicationService = new ApplicationService(_httpContextAccessor.HttpContext.Session);
+            this.applicationService = applicationService;
+
         }
 
 
         public IActionResult Index()
         {
-            var gamesessionModel = new GameSessionModel();
-            var statisticsModel = new StatisticsModel();
-           
-          
             
-            var guessedNumnbers = storageServise.GetFromStorge<List<int>>("GuessedNumbers");
-            if (guessedNumnbers != null)
+            var statisticsModel = new StatisticsModel();
+            var statics = storageServise.GetFromStorge<Statics>("Statics");
+            if (statics != null)
             {
+                statisticsModel.GuessedNumbers = statics.GuessedNumbers;
+                statisticsModel.PsychicGuesses = statics.PsychicGuesses;
 
-                statisticsModel.GuessedNumbers = guessedNumnbers;
             }
+
+            //todo надо разобратся statisticsModel.PsychicGuesses;
 
             var psychics = storageServise.GetFromStorge<List<Psychic>>("psychics");
             if (psychics != null)
@@ -57,7 +58,7 @@ namespace PsychicTest.Controllers
         [HttpPost]
         public IActionResult GenerateGuesswork()
         {
-            var guessworModel = new GuessworkModel();
+            var guessworModel = new GuessModel();
             guessworModel.Psychics = applicationService.Guesswork();
             storageServise.SetIntoStorge("GuessworkModel",guessworModel);
             return Redirect("Guesswork");
@@ -66,7 +67,7 @@ namespace PsychicTest.Controllers
       
         public IActionResult Guesswork()
         {
-            var guessworkModel = storageServise.GetFromStorge<GuessworkModel>("GuessworkModel");
+            var guessworkModel = storageServise.GetFromStorge<GuessModel>("GuessworkModel");
             return View(guessworkModel);
         }
         [HttpPost]

@@ -20,7 +20,7 @@
 
             Имя экстрасенса: @p.Name
             <br />
-            Догадка экстрасенса: @p.GuessedWork
+            Догадка экстрасенса: @p.Guess
             <br />
             Уровень достоверности: @p.ConfidenceLevel
             <br />
@@ -37,12 +37,12 @@
                     </tr>
                     @{
 
-                        for (int i = 0; i < p.GuessedWorkHistory.Count; i++)
+                        for (int i = 0; i < p.GuessedHistory.Count; i++)
                         {
                          
                             <tr>
                                 <td>@(i+1) </td>
-                                <td>@p.GuessedWorkHistory[i]</td>
+                                <td>@p.GuessedHistory[i]</td>
                             </tr> 
                         }
 

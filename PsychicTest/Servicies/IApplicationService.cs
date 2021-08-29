@@ -9,6 +9,7 @@ namespace PsychicTest.Servicies
         List<Psychic> CreatePsychics();
         void CountConfidenceLevel(int guessedNumber);
         List<Psychic> Guesswork();
+        Statics GetStatitics();
 
 
     }

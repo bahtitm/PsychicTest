@@ -7,12 +7,19 @@ namespace PsychicTest.Servicies
     public class ApplicationService : IApplicationService
     {
         private readonly ISession session;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+      
        
         const int PsychicCount = 2;
-        public ApplicationService(ISession session)
+        public ApplicationService(IHttpContextAccessor httpContextAccessor)
         {
 
-            this.session = session;
+            this.session = httpContextAccessor.HttpContext.Session;
+
+            
+
+
+
         }
         public void AddIntoHistoryUserGuessedNumber(int guessedNumber)
         {
@@ -34,14 +41,9 @@ namespace PsychicTest.Servicies
         public List<Psychic> CreatePsychics()
         {
 
-            List<Psychic> psychics = new List<Psychic>();
-            for (int i = 0; i < PsychicCount; i++)
-            {
-                psychics.Add(PsyhicGenerator.GeneratePsychic());
-            }
-            session.SetObjectAsJson("psychics", psychics);
+            session.SetObjectAsJson("psychics", GameSession.Psychics);
           
-            return psychics;
+            return GameSession.Psychics;
         }
 
         public void CountConfidenceLevel(int guessedNumber)
@@ -49,14 +51,20 @@ namespace PsychicTest.Servicies
 
             AddIntoHistoryUserGuessedNumber(guessedNumber);
             var psychics = session.GetObjectFromJson<List<Psychic>>("psychics");
+            var psychicGuess = new Dictionary<string, int>();
+            var psychicConfidenceLevel = new Dictionary<string, int>();
             foreach (var item in psychics)
             {
 
                 item.CountConfidenceLevel(guessedNumber);
+                psychicGuess.Add(item.Name,item.Guess);
+                psychicConfidenceLevel.Add(item.Name,item.ConfidenceLevel);
 
             }
 
             session.SetObjectAsJson("psychics", psychics);
+            GameSession.UpdateStatics(guessedNumber, psychicGuess, psychicConfidenceLevel);
+            session.SetObjectAsJson("Statics",GameSession.Statics);
 
         }
 
@@ -73,6 +81,12 @@ namespace PsychicTest.Servicies
             session.SetObjectAsJson("psychics", psychics);
             return psychics;
         }
+
+        public Statics GetStatitics()
+        {
+            return GameSession.Statics;
+        }
+
 
     }
 }
