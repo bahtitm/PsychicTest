@@ -7,24 +7,26 @@ using System.Threading.Tasks;
 
 namespace PsychicTest.Servicies
 {
-    public class StorageService : IStorageServise
+    public class StorageService : IStorageService
     {
         private readonly ISession session;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public StorageService(ISession session)
+        public StorageService(IHttpContextAccessor httpContextAccessor)
         {
-            this.session = session;
+           // this.session = session;
+            this.httpContextAccessor = httpContextAccessor;
         }
       
 
         public T GetFromStorge<T>(string key)
         {
-            return session.GetObjectFromJson<T>(key);
+            return httpContextAccessor.HttpContext.Session.GetObjectFromJson<T>(key);
         }
 
         public void SetIntoStorge(string key, object value)
         {
-            session.SetObjectAsJson(key, value);
+            httpContextAccessor.HttpContext.Session.SetObjectAsJson(key, value);
         }
     }
 }

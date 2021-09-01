@@ -1,8 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    
+
 }
-@model StatisticsModel
+@model Statistics
 <div class="block1">
     <form id="form1" method="post" action="Home/GenerateGuesswork">
         <label>Загадайте двух значное число</label> <br />
@@ -39,16 +39,17 @@
 
                         for (int i = 0; i < p.GuessedHistory.Count; i++)
                         {
-                         
+
                             <tr>
                                 <td>@(i+1) </td>
                                 <td>@p.GuessedHistory[i]</td>
-                            </tr> 
+                            </tr>
+
                         }
 
                     }
-                    
-                    
+
+
                 </table>
             </div>
 
@@ -70,15 +71,17 @@
                 <th>№</th>
                 <th>Значения</th>
             </tr>
-            
+
             @{
                 for (int i = 0; i < Model.GuessedNumbers.Count; i++)
                 {
                     <tr>
                         <td>
-                            @(i+1) </td>
+                            @(i+1)
+                        </td>
                         <td>@Model.GuessedNumbers[i]</td>
-                    </tr> 
+                    </tr>
+
                 }
             }
         </table>

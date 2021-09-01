@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PsychicTest.Servicies
 {
-    public interface IStorageServise
+    public interface IStorageService
     {
         void SetIntoStorge(string key, object value);
         

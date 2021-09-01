@@ -1,24 +1,22 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PsychicTest.Entities;
+using PsychicTest.Dtos;
 using PsychicTest.Models;
 using PsychicTest.Servicies;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace PsychicTest.Controllers
 {
     public class HomeController : Controller
     {
-        
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IStorageServise storageServise;
+
+
         private readonly IApplicationService applicationService;
 
-        public HomeController(IHttpContextAccessor httpContextAccessor, IApplicationService applicationService)
+
+        public HomeController(IApplicationService applicationService)
         {
-            _httpContextAccessor = httpContextAccessor;
-            this.storageServise = new StorageService(_httpContextAccessor.HttpContext.Session) ;
+
             this.applicationService = applicationService;
 
         }
@@ -26,49 +24,38 @@ namespace PsychicTest.Controllers
 
         public IActionResult Index()
         {
-            
-            var statisticsModel = new StatisticsModel();
-            var statics = storageServise.GetFromStorge<Statics>("Statics");
-            if (statics != null)
+
+            var statisticsModel = new Statistics();
+
+            var gameSession = applicationService.GetGameSession();
+
+
+            if (gameSession != null)
             {
-                statisticsModel.GuessedNumbers = statics.GuessedNumbers;
-                statisticsModel.PsychicGuesses = statics.PsychicGuesses;
-
-            }
-
-            //todo надо разобратся statisticsModel.PsychicGuesses;
-
-            var psychics = storageServise.GetFromStorge<List<Psychic>>("psychics");
-            if (psychics != null)
-            {
-                
-                statisticsModel.Psychics = psychics;
-                
+                statisticsModel.Psychics = gameSession.Psychics;
+                statisticsModel.GuessedNumbers = gameSession.GuessedNumbers;
             }
             else
             {
-                statisticsModel.Psychics = applicationService.CreatePsychics();
-               
-                
+                applicationService.GameInit();
             }
-            
             return View(statisticsModel);
 
         }
         [HttpPost]
         public IActionResult GenerateGuesswork()
         {
-            var guessworModel = new GuessModel();
-            guessworModel.Psychics = applicationService.Guesswork();
-            storageServise.SetIntoStorge("GuessworkModel",guessworModel);
+            var guessModel = new Guess();
+            guessModel.Psychics = applicationService.Guesswork();
             return Redirect("Guesswork");
         }
 
-      
         public IActionResult Guesswork()
         {
-            var guessworkModel = storageServise.GetFromStorge<GuessModel>("GuessworkModel");
-            return View(guessworkModel);
+            var gameSession = applicationService.GetGameSession();
+            var guessModel = new Guess();
+            guessModel.Psychics = gameSession.Psychics;
+            return View(guessModel);
         }
         [HttpPost]
         public IActionResult CountConfidenceLevel(int guessedNumber)

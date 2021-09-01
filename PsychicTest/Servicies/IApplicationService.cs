@@ -5,11 +5,13 @@ namespace PsychicTest.Servicies
 {
     public interface IApplicationService
     {
-        void AddIntoHistoryUserGuessedNumber(int guessedNumber);
-        List<Psychic> CreatePsychics();
-        void CountConfidenceLevel(int guessedNumber);
+        //void AddIntoHistoryUserGuessedNumber(int guessedNumber);
+        //List<Psychic> CreatePsychics();
+        GameSession CountConfidenceLevel(int guessedNumber);
         List<Psychic> Guesswork();
-        Statics GetStatitics();
+        //Statics GetStatitics();
+        void GameInit();
+        GameSession GetGameSession();
 
 
     }

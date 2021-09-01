@@ -2,14 +2,15 @@
 
 namespace PsychicTest.Entities
 {
-    public static class GameSession
+    public  class GameSession
     {
-        public static List<Psychic> Psychics { get; set; } = new List<Psychic>();
-
-        public static Statics Statics { get; set; } = new Statics();
+        public  List<Psychic> Psychics { get; private set; } = new List<Psychic>();
 
       
-        public static  void GameSessionInit(List<string> psychicNames)
+        public  List<int> GuessedNumbers { get; private set; } = new List<int>();
+
+
+        public   void GameSessionInit(List<string> psychicNames)
         {
             
             foreach (var item in psychicNames)
@@ -19,11 +20,11 @@ namespace PsychicTest.Entities
             }
         }
 
-        public static  void UpdateStatics(int guessedNumber, Dictionary<string, int> psychicGuess, Dictionary<string, int> psychicConfidenceLevel)
+        public   void GuessedNumbersAdd(int guessedNumber)
         {
-            Statics.GuessedNumbers.Add(guessedNumber);
-            Statics.PsychicGuesses.Add(psychicGuess);
-            Statics.PsychicConfidenceLevel = psychicConfidenceLevel;
+            GuessedNumbers.Add(guessedNumber);         
+           
+
         }
     }
 }

@@ -7,85 +7,72 @@ namespace PsychicTest.Servicies
     public class ApplicationService : IApplicationService
     {
         private readonly ISession session;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-      
-       
+        private readonly IStorageService storageServise;
         const int PsychicCount = 2;
-        public ApplicationService(IHttpContextAccessor httpContextAccessor)
+        public ApplicationService(IHttpContextAccessor httpContextAccessor, IStorageService storageServise)
         {
 
             this.session = httpContextAccessor.HttpContext.Session;
-
+            this.storageServise = storageServise;
+        }
+        public void GameInit()
+        {
+            List<string> psychicsNames = new List<string>();
+            for (int i = 0; i < PsychicCount; i++)
+            {
+                var name = $"mag{i}";
+                psychicsNames.Add(name);
+            }
+            var gamesession = new GameSession();
+            gamesession.GameSessionInit(psychicsNames);
+            storageServise.SetIntoStorge("GameSession", gamesession);
+            //session.SetObjectAsJson("GameSession", gamesession);
+            var id = session.Id;
             
-
+        }
+        public GameSession CountConfidenceLevel(int guessedNumber)
+        {
+            //var gamesession = session.GetObjectFromJson<GameSession>("GameSession");
+            var gamesession = storageServise.GetFromStorge<GameSession>("GameSession");
+            foreach (var item in gamesession.Psychics)
+            {              
+                item.CountConfidenceLevel(guessedNumber);              
+            }            
+            gamesession.GuessedNumbersAdd(guessedNumber);
+            //session.Remove("GameSession");
+            storageServise.SetIntoStorge("GameSession", gamesession);
+           //session.SetObjectAsJson("GameSession", gamesession);
+           
+            return gamesession;
 
 
         }
-        public void AddIntoHistoryUserGuessedNumber(int guessedNumber)
+        public GameSession GetGameSession()
         {
-            var guessedNumbers = session.GetObjectFromJson<List<int>>("GuessedNumbers");
-            if (guessedNumbers != null)
-            {
-                guessedNumbers.Add(guessedNumber);
-            }
-            else
-            {
-                guessedNumbers = new List<int>();
-                guessedNumbers.Add(guessedNumber);
-
-
-            }
-            session.Remove("GuessedNumbers");
-            session.SetObjectAsJson("GuessedNumbers", guessedNumbers);
-        }
-        public List<Psychic> CreatePsychics()
-        {
-
-            session.SetObjectAsJson("psychics", GameSession.Psychics);
-          
-            return GameSession.Psychics;
-        }
-
-        public void CountConfidenceLevel(int guessedNumber)
-        {
-
-            AddIntoHistoryUserGuessedNumber(guessedNumber);
-            var psychics = session.GetObjectFromJson<List<Psychic>>("psychics");
-            var psychicGuess = new Dictionary<string, int>();
-            var psychicConfidenceLevel = new Dictionary<string, int>();
-            foreach (var item in psychics)
-            {
-
-                item.CountConfidenceLevel(guessedNumber);
-                psychicGuess.Add(item.Name,item.Guess);
-                psychicConfidenceLevel.Add(item.Name,item.ConfidenceLevel);
-
-            }
-
-            session.SetObjectAsJson("psychics", psychics);
-            GameSession.UpdateStatics(guessedNumber, psychicGuess, psychicConfidenceLevel);
-            session.SetObjectAsJson("Statics",GameSession.Statics);
-
+            //var gamesession = session.GetObjectFromJson<GameSession>("GameSession");
+            var gamesession = storageServise.GetFromStorge<GameSession>("GameSession");
+            return gamesession;
         }
 
         public List<Psychic> Guesswork()
         {
 
-            var psychics = session.GetObjectFromJson<List<Psychic>>("psychics");
+           
+            //var gamesession = session.GetObjectFromJson<GameSession>("GameSession");
+            var gamesession = storageServise.GetFromStorge<GameSession>("GameSession");
 
-            foreach (var item in psychics)
+            foreach (var item in gamesession.Psychics)
             {
                 item.SetGuessworkAndWriteIntoHistory();
 
             }
-            session.SetObjectAsJson("psychics", psychics);
-            return psychics;
-        }
+           
+           // session.Remove("GameSession");
+            //session.SetObjectAsJson("GameSession", gamesession);
+            storageServise.SetIntoStorge("GameSession", gamesession);
 
-        public Statics GetStatitics()
-        {
-            return GameSession.Statics;
-        }
+            return gamesession.Psychics;
+        }  
 
 
     }

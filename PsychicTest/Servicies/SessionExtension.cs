@@ -16,7 +16,10 @@ namespace PsychicTest.Servicies
         {
             var value = session.GetString(key);
 
-            return value == null ? default : JsonConvert.DeserializeObject<T>(value);
+            var serializerSettings = new JsonSerializerSettings();
+            serializerSettings.ContractResolver = new IncludePrivateStateContractResolver();
+           
+            return value == null ? default : JsonConvert.DeserializeObject<T>(value,serializerSettings);
         }
     }
 }

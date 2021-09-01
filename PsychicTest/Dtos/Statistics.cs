@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PsychicTest.Models
+namespace PsychicTest.Dtos
 {
-    public class StatisticsModel
+    public class Statistics
     {
-        public List<Psychic> Psychics { get; set; }
+        public List<Psychic> Psychics { get; set; } = new List<Psychic>();
         public List<int> GuessedNumbers { get; set; } = new List<int>();
-        public ICollection<Dictionary<string, int>> PsychicGuesses { get; set; } = new List<Dictionary<string, int>>();
     }
 }
