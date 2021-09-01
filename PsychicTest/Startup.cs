@@ -1,35 +1,31 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PsychicTest.Entities;
 using PsychicTest.Servicies;
 
 namespace PsychicTest
 {
     public class Startup
     {
-        const int PsychicCount = 2;
-        
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            
+
         }
 
         public IConfiguration Configuration { get; }
-      
+
 
         public void ConfigureServices(IServiceCollection services)
         {
 
             services.AddControllersWithViews();
             services.AddSession();
-           services.AddHttpContextAccessor();           
+            services.AddHttpContextAccessor();
             services.AddSingleton<IStorageService, StorageService>();
             services.AddSingleton<IApplicationService, ApplicationService>();
 
@@ -47,10 +43,10 @@ namespace PsychicTest
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-           
+
 
             app.UseSession();
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -63,12 +59,6 @@ namespace PsychicTest
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-               
-                
-                
-               
-
-
             });
         }
     }
